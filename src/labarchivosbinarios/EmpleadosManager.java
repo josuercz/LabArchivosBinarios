@@ -18,7 +18,7 @@ public class EmpleadosManager {
             f.mkdir();
             rcods=new RandomAccessFile("company/codigos.emp","rw");
             remps=new RandomAccessFile("company/empleados.emp","rw");
-            
+            initCode();
         }catch(IOException e){
             System.out.println("NO DEBERIA PASAR ESTO");
         }
@@ -45,6 +45,7 @@ public class EmpleadosManager {
         remps.writeLong(Calendar.getInstance().getTimeInMillis());
         remps.writeLong(0);
         //aseguramos sus archivos individuales
+        createEmployeeFolder(code);
     } 
     private String employeeFolder(int code){//existe carpeta por cada empleado es decir raiz
         return "company/empleado"+code;
