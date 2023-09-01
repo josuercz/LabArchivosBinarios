@@ -126,8 +126,8 @@ public class COPIA_TRABAJAnicolle_ema {
     */
     public void addSaleToEmployee(int code, double sale) throws IOException{
         if(isEmployeeActive(code)){
-            RandomAccessFile mes=salesFileFor(code);
             int mesActual=Calendar.getInstance().get(Calendar.MONTH);
+            RandomAccessFile mes=salesFileFor(code);
             int bytesEstas=mesActual*12;//ubica
             mes.seek(bytesEstas);
             double salActual=remps.readDouble();
@@ -137,6 +137,7 @@ public class COPIA_TRABAJAnicolle_ema {
     }
 
   public void payEmployee(int code){
+      
       /*
       public void payEmployee(int code): Escribe el recibo de pago, 
       si el empleado está activo y no se le ha pagado, con el siguiente formato:
