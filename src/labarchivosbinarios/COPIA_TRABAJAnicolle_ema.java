@@ -111,19 +111,7 @@ public class COPIA_TRABAJAnicolle_ema {
         }
         return false;
     }
-    /*
-    public void addEmployes(String name, double salary) throws IOException{
-       // codigo nombre  salario  fecha contratacion  sfecha despido
-        remps.seek(remps.length());
-        int code=getCode();//archivos para cada empleado con su folder por ventas
-        remps.writeInt(code);
-        remps.writeUTF(name);
-        remps.writeDouble(salary);
-        remps.writeLong(Calendar.getInstance().getTimeInMillis());
-        remps.writeLong(0);
-        //aseguramos sus archivos individuales
-    } 
-    */
+
     public void addSaleToEmployee(int code, double sale) throws IOException{
         if(isEmployeeActive(code)){
             int mesActual=Calendar.getInstance().get(Calendar.MONTH);
@@ -136,20 +124,4 @@ public class COPIA_TRABAJAnicolle_ema {
         }
     }
 
-  public void payEmployee(int code){
-      
-      /*
-      public void payEmployee(int code): Escribe el recibo de pago, 
-      si el empleado está activo y no se le ha pagado, con el siguiente formato:
-    * long fecha de pago
-
-    * double sueldo: es basándonos en el salario más la comisión de las ventas por el 10%.
-
-    * double deducción: Tiene una deducción del 3.5% al sueldo.
-
-    * int año
-
-    * int mes
-      */
-  }
 }

@@ -113,62 +113,72 @@ public class EmpleadosManager {
         }
         return false;
     }
+    public void addSaleToEmployee(int code, double sale) throws IOException{
+        if(isEmployeeActive(code)){
+            int mesActual=Calendar.getInstance().get(Calendar.MONTH);
+            RandomAccessFile mes=salesFileFor(code);
+            int bytesEstas=mesActual*12;//ubica
+            mes.seek(bytesEstas);
+            double salActual=remps.readDouble();
+            mes.seek(bytesEstas);
+            mes.writeDouble(salActual+sale);
+        }
+    }
         private RandomAccessFile billsFilefor(int code) throws IOException 
     {
        String dirPadre = employeeFolder(code);
        String path= dirPadre +"/recibos.emp";
        return new RandomAccessFile(path,"rw");
     }
-    
+
+    public void payEmployee(int code) throws IOException {
+        if (isEmployeeActive(code) && !isEmployeePayed(code)) {
+            remps.seek(0);
+            while (remps.getFilePointer() < remps.length()) {
+                int cod=remps.readInt();
+                long pos=remps.getFilePointer();
+                String name=remps.readUTF();
+                double salario=remps.readDouble();
+                Date contrato=new Date(remps.readLong());
+                if (remps.readLong()== 0 && cod==code) {
+                    //
+                    RandomAccessFile raf = salesFileFor(code);
+                    int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+                    raf.seek(currentMonth * 12);
+                    //
+                    double total=salario+raf.readDouble() * 0.10;
+                    factura(code, new Date().getTime(),total, total* 0.035, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH));
+                    markEmployeeAsPaid(code);
+                    System.out.println("Pagando a: " + name);
+                    System.out.println("Total del sueldo: " + total);
+                }
+            }
+        }
+    }
+
+    private void factura(int code, long diaPago, double total, double menos, int yyyy, int MM)
+            throws IOException {
+        RandomAccessFile fact = billsFilefor(code);
+        fact.writeLong(diaPago);
+        fact.writeDouble(total);
+        fact.writeDouble(menos);
+        fact.writeInt(yyyy);
+        fact.writeInt(MM);
+        fact.writeBoolean(true);
+    }
+
+    private void markEmployeeAsPaid(int code) throws IOException {
+        RandomAccessFile ryear = salesFileFor(code);
+        int cM = Calendar.getInstance().get(Calendar.MONTH);
+        ryear.seek(cM*12+8); 
+        ryear.writeBoolean(true);
+    }
+
+    public boolean isEmployeePayed(int code) throws IOException {
+        RandomAccessFile recibo= billsFilefor(code);
+        int cM = Calendar.getInstance().get(Calendar.MONTH);
+        recibo.seek(cM*24+20);
+        return recibo.readBoolean();
+    }
+
 }
-/*
-Instrucciones:
-
--Crear el ejercicio en SWING. JOSUE
-
-
- NICOLE Y EMA:       
-        addSaleToEmployee(int code, double sale): primero se necesita buscar ese empleado que envía un código por parámetro, luego que la identifica que existe el empleado se debe de sumarle el monto recibido a las ventas del mes actual al empleado.
-        public void payEmployee(int code): Escribe el recibo de pago, si el empleado está activo y no se le ha pagado, con el siguiente formato:
-            * long fecha de pago
-
-            * double sueldo: es basándonos en el salario más la comisión de las ventas por el 10%.
-
-            * double deducción: Tiene una deducción del 3.5% al sueldo.
-
-            * int año
-
-            * int mes
-
-           *Escribir un boolean que cambia el boolean de pagado en el archivo de ventas (salesFileFor(code))
-
-ANA:
-
-    *También se necesita enviar una salida de pantalla del nombre del empleado y el total del sueldo de pago.
-
-     *Para esta función necesita la siguiente llamada de funciones:
-
-     private RandomAccessFile billsFilefor(int code) : Se necesita buscar la carpeta del empleado y agregar un archivo nombrado como recibos.emp para crear un recibo con el formato mostrado antes.
-
-
-
-NICOLE Y EMA :public boolean isEmployeePayed(int code) : Se busca el empleado con la ayuda de salesFileFor con el propósito en devolver si ya se le pagó el mes al empleado.
-
-
-
-
-Se necesita hacer un menú:
-            MENÚ
-
-1- Agregar Empleado JOSUE
-
-2- Listar Empleados No Despedidos ANA
-
-3- Agregar Venta a Empleado JOSUE
-
-4- Pagar Empleado NICOLE Y EMA
-
-5- Despedir Empleado ANA
-
-6- Salir
-*/
