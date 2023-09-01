@@ -148,7 +148,7 @@ public class EmpleadosManager {
                     //
                     double total=salario+raf.readDouble() * 0.10;
                     factura(code, new Date().getTime(),total, total* 0.035, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH));
-                    markEmployeeAsPaid(code);
+                    marcar(code);
                     System.out.println("Pagando a: " + name);
                     System.out.println("Total del sueldo: " + total);
                 }
@@ -167,7 +167,7 @@ public class EmpleadosManager {
         fact.writeBoolean(true);
     }
 
-    private void markEmployeeAsPaid(int code) throws IOException {
+    private void marcar(int code) throws IOException {
         RandomAccessFile ryear = salesFileFor(code);
         int cM = Calendar.getInstance().get(Calendar.MONTH);
         ryear.seek(cM*12+8); 
