@@ -108,6 +108,12 @@ public class EmpleadosManager {
         }
         return false;
     }
+        private RandomAccessFile billsFilefor(int code) throws IOException 
+    {
+       String dirPadre = employeeFolder(code);
+       String path= dirPadre +"/recibos.emp";
+       return new RandomAccessFile(path,"rw");
+    }
     
 }
 /*
