@@ -10,9 +10,13 @@ import java.io.RandomAccessFile;
 import java.util.Calendar;
 import java.util.Date;
 
-public class EmpleadosManager {
-    private RandomAccessFile rcods, remps;
-    public EmpleadosManager() {
+/**
+ *
+ * @author pcast
+ */
+public class COPIA_TRABAJAnicolle_ema {
+      private RandomAccessFile rcods, remps;
+    public COPIA_TRABAJAnicolle_ema() {
         try{
             File f=new File("company");
             f.mkdir();
@@ -108,55 +112,5 @@ public class EmpleadosManager {
         return false;
     }
     
+  
 }
-/*
-Instrucciones:
-
--Crear el ejercicio en SWING. JOSUE
-
-
- NICOLE Y EMA:       
-        addSaleToEmployee(int code, double sale): primero se necesita buscar ese empleado que envía un código por parámetro, luego que la identifica que existe el empleado se debe de sumarle el monto recibido a las ventas del mes actual al empleado.
-        public void payEmployee(int code): Escribe el recibo de pago, si el empleado está activo y no se le ha pagado, con el siguiente formato:
-            * long fecha de pago
-
-            * double sueldo: es basándonos en el salario más la comisión de las ventas por el 10%.
-
-            * double deducción: Tiene una deducción del 3.5% al sueldo.
-
-            * int año
-
-            * int mes
-
-           *Escribir un boolean que cambia el boolean de pagado en el archivo de ventas (salesFileFor(code))
-
-ANA:
-
-    *También se necesita enviar una salida de pantalla del nombre del empleado y el total del sueldo de pago.
-
-     *Para esta función necesita la siguiente llamada de funciones:
-
-     private RandomAccessFile billsFilefor(int code) : Se necesita buscar la carpeta del empleado y agregar un archivo nombrado como recibos.emp para crear un recibo con el formato mostrado antes.
-
-
-
-NICOLE Y EMA :public boolean isEmployeePayed(int code) : Se busca el empleado con la ayuda de salesFileFor con el propósito en devolver si ya se le pagó el mes al empleado.
-
-
-
-
-Se necesita hacer un menú:
-            MENÚ
-
-1- Agregar Empleado JOSUE
-
-2- Listar Empleados No Despedidos ANA
-
-3- Agregar Venta a Empleado JOSUE
-
-4- Pagar Empleado NICOLE Y EMA
-
-5- Despedir Empleado ANA
-
-6- Salir
-*/
