@@ -72,7 +72,7 @@ public class EmpleadosManager {
             }
         }
     }
-    private void listado() throws IOException{
+    public void listado() throws IOException{
         remps.seek(0);
         while(remps.getFilePointer()<remps.length()){
             int code=remps.readInt();

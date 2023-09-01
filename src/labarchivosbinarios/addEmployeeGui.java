@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -95,6 +96,10 @@ public class addEmployeeGui extends JFrame implements ActionListener {
             
             try {
                 emp.addEmployes(nombre, salary);
+                JOptionPane.showMessageDialog(null, "Se agrego el empleado " + nombre + " con un salario de " + salario);
+                MenuPrincipal menu = new MenuPrincipal();
+                menu.setVisible(true);
+                this.dispose();
             } catch (IOException ex) {
                 System.out.println("Error, no se pudo agregar el empleado");
             }
