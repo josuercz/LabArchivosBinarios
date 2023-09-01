@@ -105,7 +105,9 @@ public class MenuPrincipal extends JFrame implements ActionListener {
         }
         
         if (e.getSource() == botonPayEmployee) {
-            
+            PayEmployeeGui pay = new PayEmployeeGui();
+            pay.setVisible(true);
+            this.dispose();
         }
         
     }    
