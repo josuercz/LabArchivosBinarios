@@ -79,7 +79,7 @@ public class MenuPrincipal extends JFrame implements ActionListener {
         }
         
         if (e.getSource() == botonEmployeeList) {
-            ListaEmpleadosActivos lista = new ListaEmpleadosActivos();
+            ListadoEmpleadosActivos lista = new ListadoEmpleadosActivos();
             lista.setVisible(true);
             this.dispose();
         }
