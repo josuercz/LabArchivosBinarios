@@ -110,6 +110,12 @@ public class MenuPrincipal extends JFrame implements ActionListener {
             this.dispose();
         }
         
+        if (e.getSource() == botonAddSale) {
+            VentasGUI ventas = new VentasGUI();
+            ventas.setVisible(true);
+            this.dispose();
+        }
+        
     }    
 }
 

@@ -14,56 +14,63 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-/**
- *
- * @author josuc
- */
-public class PayEmployeeGui extends JFrame implements ActionListener{
-JPanel panelPay = new JPanel();
+public class VentasGUI extends JFrame implements ActionListener {
+    JPanel panelFire = new JPanel();
     JLabel lblTitulo = new JLabel();
     JButton botonRegresar = new JButton();
     JLabel lblCodigo = new JLabel();
+    JLabel lblMonto=new JLabel();
     JTextArea txtCodigo = new JTextArea();
-    JButton botonPagar = new JButton();
+    JTextArea txtMonto = new JTextArea();
+    JButton botonAgregar = new JButton();
     
-    public PayEmployeeGui() {
+    public VentasGUI() {
         setSize(500,500);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        panelPay.setSize(500, 500);
-        panelPay.setLayout(null);
-        add(panelPay);
+        panelFire.setSize(500, 500);
+        panelFire.setLayout(null);
+        add(panelFire);
         
-        lblTitulo.setText("Pagar al Empleado");
+        lblTitulo.setText("Agregar Ventas");
         lblTitulo.setBounds(120, 30, 280, 35);
         lblTitulo.setFont(new Font(null, Font.PLAIN, 30));
         lblTitulo.setForeground(Color.black);
-        panelPay.add(lblTitulo); 
+        panelFire.add(lblTitulo); 
         
         botonRegresar.setText("Regresar");
         botonRegresar.setBounds(100, 400, 130, 30);
         botonRegresar.addActionListener(this);
         botonRegresar.setBackground(Color.white);
-        panelPay.add(botonRegresar);
+        panelFire.add(botonRegresar);
         
         lblCodigo.setText("Codigo: ");
         lblCodigo.setBounds(100, 200, 50, 30);
-        panelPay.add(lblCodigo); 
+        panelFire.add(lblCodigo); 
+        
+        lblMonto.setText("Monto de Venta");
+        lblMonto.setBounds(100, 300, 150, 30);
+        panelFire.add(lblMonto); 
         
         txtCodigo.setText("");
         txtCodigo.setBounds(180, 200, 200, 30);
-        panelPay.add(txtCodigo);
+        panelFire.add(txtCodigo);
         
-        botonPagar.setText("Pagar");
-        botonPagar.setBounds(250, 400, 130, 30);
-        botonPagar.addActionListener(this);
-        botonPagar.setBackground(Color.white);
-        panelPay.add(botonPagar);
+        txtMonto.setText("");
+        txtMonto.setBounds(200, 300, 180, 30);
+        panelFire.add(txtMonto);
+        
+        botonAgregar.setText("Agregar");
+        botonAgregar.setBounds(250, 400, 130, 30);
+        botonAgregar.addActionListener(this);
+        botonAgregar.setBackground(Color.white);
+        panelFire.add(botonAgregar);
     }
 
     @Override
@@ -74,16 +81,17 @@ JPanel panelPay = new JPanel();
             this.dispose();
         }
         
-        if (e.getSource() == botonPagar) {
+        if (e.getSource() == botonAgregar) {
             String code = txtCodigo.getText();
-            int codigo = Integer.parseInt(code);
-            
+            int codigo = Integer.parseInt(code); 
+            String monto=txtMonto.getText();
+            double amount=Double.parseDouble(monto);
             EmpleadosManager emp = new EmpleadosManager();
             try {
-                emp.payEmployee(codigo);
-                
+                emp.addSaleToEmployee(codigo,amount);
+                JOptionPane.showMessageDialog(null, "Se despidio el empleado con codigo " + codigo);
             } catch (IOException ex) {
-                System.out.println("Error no se le pudo pagar al empleado");
+                System.out.println("Error no se pudo despedir el empleado");
             }
         }
     }
