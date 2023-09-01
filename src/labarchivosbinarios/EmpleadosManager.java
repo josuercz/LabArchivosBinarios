@@ -104,9 +104,11 @@ public class EmpleadosManager {
     public boolean fireEmployee(int code)throws IOException{
         if(isEmployeeActive(code)){
             String name=remps.readUTF();
+            double salary= remps.readDouble();
             remps.skipBytes(16);
             remps.writeLong(new Date().getTime());
             System.out.println("Despidiendo a: "+name);
+            System.out.println("Salario de pago: "+salary);
             return true;
         }
         return false;
