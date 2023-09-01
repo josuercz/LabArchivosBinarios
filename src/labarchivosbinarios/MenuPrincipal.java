@@ -21,18 +21,20 @@ public class MenuPrincipal extends JFrame implements ActionListener {
     JPanel panelMenu = new JPanel();
     JButton botonAddEmployee = new JButton();
     JButton botonEmployeeList = new JButton();
+    JButton botonAddSale = new JButton();
+    JButton botonPayEmployee = new JButton();
     JButton botonFireEmployee = new JButton();
     JButton botonExit = new JButton();
     JLabel lblMenu = new JLabel();
     
     
     public MenuPrincipal() {
-        setSize(500,500);
+        setSize(500,700);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        panelMenu.setSize(500, 500);
+        panelMenu.setSize(500, 700);
         panelMenu.setLayout(null);
         add(panelMenu);
         
@@ -54,14 +56,26 @@ public class MenuPrincipal extends JFrame implements ActionListener {
         botonEmployeeList.setBackground(Color.white);
         panelMenu.add(botonEmployeeList);
         
+        botonAddSale.setText("Agregar Venta");
+        botonAddSale.setBounds(145, 300, 200, 30);
+        botonAddSale.addActionListener(this);
+        botonAddSale.setBackground(Color.white);
+        panelMenu.add(botonAddSale);
+        
+        botonPayEmployee.setText("Pagar Empleado");
+        botonPayEmployee.setBounds(145, 400, 200, 30);
+        botonPayEmployee.addActionListener(this);
+        botonPayEmployee.setBackground(Color.white);
+        panelMenu.add(botonPayEmployee);
+        
         botonFireEmployee.setText("Despedir empleado");
-        botonFireEmployee.setBounds(170, 300, 150, 30);
+        botonFireEmployee.setBounds(170, 500, 150, 30);
         botonFireEmployee.addActionListener(this);
         botonFireEmployee.setBackground(Color.white);
         panelMenu.add(botonFireEmployee);        
         
         botonExit.setText("Salir");
-        botonExit.setBounds(180, 400, 130, 30);
+        botonExit.setBounds(180, 600, 130, 30);
         botonExit.addActionListener(this);
         botonExit.setBackground(Color.white);
         panelMenu.add(botonExit);
@@ -83,6 +97,17 @@ public class MenuPrincipal extends JFrame implements ActionListener {
             lista.setVisible(true);
             this.dispose();
         }
+        
+        if (e.getSource() == botonFireEmployee) {
+            FireEmployeeGui fire = new FireEmployeeGui();
+            fire.setVisible(true);
+            this.dispose();
+        }
+        
+        if (e.getSource() == botonPayEmployee) {
+            
+        }
+        
     }    
 }
 
