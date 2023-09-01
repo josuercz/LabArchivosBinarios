@@ -135,29 +135,36 @@ public class EmpleadosManager {
         if (isEmployeeActive(code) && !isEmployeePayed(code)) {
             remps.seek(0);
             while (remps.getFilePointer() < remps.length()) {
-                int cod=remps.readInt();
-                long pos=remps.getFilePointer();
-                String name=remps.readUTF();
-                double salario=remps.readDouble();
-                Date contrato=new Date(remps.readLong());
-                if (remps.readLong()== 0 && cod==code) {
-                    //
+                int cod = remps.readInt();
+                long pos = remps.getFilePointer();
+                String name = remps.readUTF();
+                double salario = remps.readDouble();
+                Date contrato = new Date(remps.readLong());
+                long ultimoPago = remps.readLong(); // Obtener la última fecha de pago
+
+                if (ultimoPago == 0 && cod == code) {
                     RandomAccessFile raf = salesFileFor(code);
-                    int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-                    raf.seek(currentMonth * 12);
-                    //
-                    double total=salario+raf.readDouble() * 0.10;
-                    factura(code, new Date().getTime(),total, total* 0.035, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH));
-                    marcar(code);
-                    System.out.println("Pagando a: " + name);
-                    System.out.println("Total del sueldo: " + total);
+                    int cM = Calendar.getInstance().get(Calendar.MONTH);
+                    raf.seek(cM * 12);
+
+                    double total = salario + raf.readDouble() * 0.10;
+                    factura(code, new Date().getTime(), total, total * 0.035, Calendar.getInstance().get(Calendar.YEAR), cM);
+                    // Marcar el mes como pagado en el archivo de ventas
+                    raf.seek(cM * 12 + 8);
+                    raf.writeBoolean(true);
+
+                    // Actualizar la fecha de último pago en el archivo de empleados
+                    remps.seek(pos + 24); // Avanzar al campo de última fecha de pago
+                    remps.writeLong(new Date().getTime()); // Actualizar con la fecha actual
+
+                    System.out.println("Nombre empleado a pagar:\t " + name);
+                    System.out.println("Total saldo:\t" + total);
                 }
             }
         }
     }
 
-    private void factura(int code, long diaPago, double total, double menos, int yyyy, int MM)
-            throws IOException {
+    private void factura(int code, long diaPago, double total, double menos, int yyyy, int MM) throws IOException {
         RandomAccessFile fact = billsFilefor(code);
         fact.writeLong(diaPago);
         fact.writeDouble(total);
@@ -167,18 +174,12 @@ public class EmpleadosManager {
         fact.writeBoolean(true);
     }
 
-    private void marcar(int code) throws IOException {
-        RandomAccessFile ryear = salesFileFor(code);
-        int cM = Calendar.getInstance().get(Calendar.MONTH);
-        ryear.seek(cM*12+8); 
-        ryear.writeBoolean(true);
-    }
-
     public boolean isEmployeePayed(int code) throws IOException {
-        RandomAccessFile recibo= billsFilefor(code);
+        RandomAccessFile recibo = billsFilefor(code);
         int cM = Calendar.getInstance().get(Calendar.MONTH);
-        recibo.seek(cM*24+20);
+        recibo.seek(cM * 24 + 20);
         return recibo.readBoolean();
     }
+
 
 }
