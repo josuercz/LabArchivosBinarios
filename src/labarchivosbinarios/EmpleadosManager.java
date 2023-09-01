@@ -80,9 +80,10 @@ public class EmpleadosManager {
             String name=remps.readUTF();
             double sal=remps.readDouble();
             Date fc=new Date(remps.readLong());
-            todo += code + "\t" + name + "\t" + sal + "\t" + fc + "\n";
+            
             if(remps.readLong()==0){
                 System.out.println(code+" - "+name+" - "+sal+" - "+fc);
+                todo += code + "\t" + name + "\t" + sal + "\t" + fc + "\n";
             }
         }
         return todo;
