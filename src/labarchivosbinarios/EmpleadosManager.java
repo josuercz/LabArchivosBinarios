@@ -72,17 +72,20 @@ public class EmpleadosManager {
             }
         }
     }
-    public void listado() throws IOException{
+    public String listado() throws IOException{
+        String todo = "";
         remps.seek(0);
         while(remps.getFilePointer()<remps.length()){
             int code=remps.readInt();
             String name=remps.readUTF();
             double sal=remps.readDouble();
             Date fc=new Date(remps.readLong());
+            todo += code + "\t" + name + "\t" + sal + "\t" + fc + "\n";
             if(remps.readLong()==0){
                 System.out.println(code+" - "+name+" - "+sal+" - "+fc);
             }
         }
+        return todo;
     }
     private boolean isEmployeeActive(int code)throws IOException{
         remps.seek(0);
