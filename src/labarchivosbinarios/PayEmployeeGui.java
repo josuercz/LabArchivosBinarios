@@ -75,16 +75,16 @@ JPanel panelPay = new JPanel();
         }
         
         if (e.getSource() == botonPagar) {
-            String code = txtCodigo.getText();
-            int codigo = Integer.parseInt(code);
-            
-            EmpleadosManager emp = new EmpleadosManager();
-            try {
-                emp.payEmployee(codigo);
-                
-            } catch (IOException ex) {
-                System.out.println("Error no se le pudo pagar al empleado");
-            }
-        }
+    String code = txtCodigo.getText();
+    int codigo = Integer.parseInt(code);
+    
+    EmpleadosManager emp = new EmpleadosManager();
+    try {
+        emp.payEmployee(codigo);
+    } catch (IOException ex) {
+        System.out.println("Error no se le pudo pagar al empleado");
+    }
+}
+
     }
 }

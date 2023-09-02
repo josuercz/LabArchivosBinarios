@@ -81,8 +81,11 @@ public class FireEmployeeGui extends JFrame implements ActionListener {
             
             EmpleadosManager emp = new EmpleadosManager();
             try {
-                emp.fireEmployee(codigo);
-                JOptionPane.showMessageDialog(null, "Se despidio el empleado con codigo " + codigo);
+                if( emp.fireEmployee(codigo)){
+                    JOptionPane.showMessageDialog(null, "Se despidio el empleado con codigo " + codigo);
+                }
+                JOptionPane.showMessageDialog(null, "No existe" + codigo);
+ 
             } catch (IOException ex) {
                 System.out.println("Error no se pudo despedir el empleado");
             }

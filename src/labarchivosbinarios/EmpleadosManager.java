@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 public class EmpleadosManager {
     private RandomAccessFile rcods, remps;
@@ -88,7 +89,7 @@ public class EmpleadosManager {
         }
         return todo;
     }
-    private boolean isEmployeeActive(int code)throws IOException{
+   private boolean isEmployeeActive(int code)throws IOException{
         remps.seek(0);
         while(remps.getFilePointer()<remps.length()){
             int cod=remps.readInt();
@@ -105,11 +106,9 @@ public class EmpleadosManager {
     public boolean fireEmployee(int code)throws IOException{
         if(isEmployeeActive(code)){
             String name=remps.readUTF();
-            double salary= remps.readDouble();
             remps.skipBytes(16);
             remps.writeLong(new Date().getTime());
             System.out.println("Despidiendo a: "+name);
-            System.out.println("Salario de pago: "+salary);
             return true;
         }
         return false;
@@ -118,69 +117,62 @@ public class EmpleadosManager {
         if(isEmployeeActive(code)){
             int mesActual=Calendar.getInstance().get(Calendar.MONTH);
             RandomAccessFile mes=salesFileFor(code);
-            int bytesEstas=mesActual*12;//ubica
+            int bytesEstas=mesActual*9;//ubica
             mes.seek(bytesEstas);
             double salActual=remps.readDouble();
-            mes.seek(bytesEstas);
+            boolean pagado=mes.readBoolean();
+            if(!pagado){
+            mes.seek(mes.getFilePointer()-8);
             mes.writeDouble(salActual+sale);
+            }
+            JOptionPane.showMessageDialog(null, "Añadida");
+        }else{
+            JOptionPane.showMessageDialog(null, "No existe");
         }
     }
+
         private RandomAccessFile billsFilefor(int code) throws IOException 
     {
-       String dirPadre = employeeFolder(code);
-       String path= dirPadre +"/recibos.emp";
+       String dirPa=employeeFolder(code);
+       String path=dirPa +"/recibos.emp";
        return new RandomAccessFile(path,"rw");
     }
-
-    public void payEmployee(int code) throws IOException {
-        if (isEmployeeActive(code) && !isEmployeePayed(code)) {
-            remps.seek(0);
-            while (remps.getFilePointer() < remps.length()) {
-                int cod = remps.readInt();
-                long pos = remps.getFilePointer();
-                String name = remps.readUTF();
-                double salario = remps.readDouble();
-                Date contrato = new Date(remps.readLong());
-                long ultimoPago = remps.readLong(); // Obtener la última fecha de pago
-
-                if (ultimoPago == 0 && cod == code) {
-                    RandomAccessFile raf = salesFileFor(code);
-                    int cM = Calendar.getInstance().get(Calendar.MONTH);
-                    raf.seek(cM * 12);
-
-                    double total = salario + raf.readDouble() * 0.10;
-                    factura(code, new Date().getTime(), total, total * 0.035, Calendar.getInstance().get(Calendar.YEAR), cM);
-                    // Marcar el mes como pagado en el archivo de ventas
-                    raf.seek(cM * 12 + 8);
-                    raf.writeBoolean(true);
-
-                    // Actualizar la fecha de último pago en el archivo de empleados
-                    remps.seek(pos + 24); // Avanzar al campo de última fecha de pago
-                    remps.writeLong(new Date().getTime()); // Actualizar con la fecha actual
-
-                    System.out.println("Nombre empleado a pagar:\t " + name);
-                    System.out.println("Total saldo:\t" + total);
-                }
-            }
-        }
-    }
-
-    private void factura(int code, long diaPago, double total, double menos, int yyyy, int MM) throws IOException {
-        RandomAccessFile fact = billsFilefor(code);
-        fact.writeLong(diaPago);
-        fact.writeDouble(total);
-        fact.writeDouble(menos);
-        fact.writeInt(yyyy);
-        fact.writeInt(MM);
-        fact.writeBoolean(true);
-    }
-
     public boolean isEmployeePayed(int code) throws IOException {
-        RandomAccessFile recibo = billsFilefor(code);
+        RandomAccessFile recibo = salesFileFor(code);
         int cM = Calendar.getInstance().get(Calendar.MONTH);
-        recibo.seek(cM * 24 + 20);
+        recibo.seek(cM*9);
+        recibo.skipBytes(8);
         return recibo.readBoolean();
     }
 
-
+    public void payEmployee(int code) throws IOException {
+        if (isEmployeeActive(code)) {
+            if (isEmployeePayed(code)) {
+                JOptionPane.showMessageDialog(null, "Ya se le pago");
+            } else {
+                RandomAccessFile raf=salesFileFor(code);
+                double sal=raf.readDouble();
+                int cM= Calendar.getInstance().get(Calendar.MONTH);
+                raf.seek(cM*9);
+                String n = raf.readUTF();
+                //System.out.println(n);
+                double ventas=raf.readDouble();
+                double sueldo=sal+(ventas*0.10);
+                double total= sueldo-(sueldo*0.035);
+                raf.writeBoolean(true);
+                //System.out.println(ventas);
+                RandomAccessFile fact=billsFilefor(code);
+                fact.seek(fact.length());
+                fact.writeLong(Calendar.getInstance().getTimeInMillis());
+                fact.writeDouble(sal+(ventas * 0.10));
+                fact.writeDouble(sueldo*0.035);
+                fact.writeShort(Calendar.getInstance().get(Calendar.YEAR));
+                fact.writeByte(cM); 
+                
+                JOptionPane.showMessageDialog(null, "Se le pago a: "+n+"Lps. "+total);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No activo");
+        }
+    }
 }

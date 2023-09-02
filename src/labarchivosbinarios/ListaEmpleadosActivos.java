@@ -45,12 +45,12 @@ public class ListaEmpleadosActivos extends JFrame implements ActionListener {
         txtlista.setText("");
         txtlista.setBounds(50, 100, 400, 300);
         panelLista.add(txtlista);
-        
         botonRegresar.setText("Regresar");
         botonRegresar.setBounds(100, 420, 130, 30);
         botonRegresar.addActionListener(this);
         botonRegresar.setBackground(Color.white);
         panelLista.add(botonRegresar);
+        
     }
 
     @Override

@@ -89,7 +89,6 @@ public class VentasGUI extends JFrame implements ActionListener {
             EmpleadosManager emp = new EmpleadosManager();
             try {
                 emp.addSaleToEmployee(codigo,amount);
-                JOptionPane.showMessageDialog(null, "Se le agrego al empleado con código "+codigo+" la venta con el monto de "+amount);
                 MenuPrincipal menu = new MenuPrincipal();
                 menu.setVisible(true);
                 this.dispose();
